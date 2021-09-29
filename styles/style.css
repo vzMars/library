@@ -58,7 +58,6 @@ body {
   background-color: #00000000;
   color: #ffffff;
   border: 2px solid #ffffff;
-  border-radius: 20px;
   width: 100px;
   padding: 10px;
 }
@@ -74,8 +73,84 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .add-card:hover {
   background-color: #4560fc;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(39, 34, 34, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  background-color: #3853ee;
+  margin: auto;
+  padding: 1rem 3rem;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.closeBtn {
+  color: #fafafa;
+  font-size: 48px;
+  font-weight: bold;
+  align-self: flex-end;
+  margin-right: -28px;
+  cursor: pointer;
+}
+
+.on {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.off {
+  display: none;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 0;
+  font-size: 25px;
+}
+
+.input {
+  width: 100%;
+  padding: 20px 35px;
+  font-size: 20px;
+}
+
+.add-btn {
+  margin-top: 10px;
+  background-color: #00000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  width: 100px;
+  padding: 10px;
+}
+
+.add-btn:hover {
+  background-color: #00000033;
+  border: 2px solid #00000033;
+}
+
+#readInput {
+  width: 20px;
+  height: 20px;
 }

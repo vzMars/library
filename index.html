@@ -23,5 +23,42 @@
         <div class="library-grid"></div>
       </div>
     </main>
+
+    <div class="container">
+      <div class="modal">
+        <div class="modal-content">
+          <span class="closeBtn">&times;</span>
+          <form class="modal-form">
+            <input
+              class="input"
+              id="titleInput"
+              type="text"
+              placeholder="Title"
+              required
+            />
+            <input
+              class="input"
+              id="textInput"
+              type="text"
+              placeholder="Author"
+              required
+            />
+            <input
+              class="input"
+              id="pagesInput"
+              type="number"
+              placeholder="Pages"
+              min="1"
+              required
+            />
+            <div class="modal-checkbox">
+              <label for="read">Read?</label>
+              <input class="checkbox" id="readInput" type="checkbox" />
+            </div>
+            <button class="add-btn" type="submit">Add</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

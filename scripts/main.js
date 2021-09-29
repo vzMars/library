@@ -1,5 +1,19 @@
 const libraryGrid = document.querySelector('.library-grid');
+const modal = document.querySelector('.modal');
+const closeBtn = document.querySelector('.closeBtn');
+
+closeBtn.addEventListener('click', modalOff);
+window.addEventListener('click', modalOff);
+
 let myLibrary = [];
+
+const book1 = new Book('The Blade Itself', 'Joe Abercrombie', 529, 'Read');
+const book2 = new Book('Best Served Cold', 'Joe Abercrombie', 534, 'Read');
+const book3 = new Book('A Little Hatred', 'Joe Abercrombie', 471, 'To-Read');
+
+myLibrary.push(book1);
+myLibrary.push(book2);
+myLibrary.push(book3);
 
 function Book(title, author, pages, read) {
   this.title = title;
@@ -8,7 +22,9 @@ function Book(title, author, pages, read) {
   this.read = read;
 }
 
-function addBookToLibrary() {}
+function addBookToLibrary() {
+  modalOn();
+}
 
 function displayLibrary() {
   myLibrary.forEach((book) => {
@@ -43,23 +59,28 @@ function displayLibrary() {
     newDiv.appendChild(removeBook);
     libraryGrid.appendChild(newDiv);
   });
-  let addDiv = document.createElement('div');
+
+  let addCard = document.createElement('div');
   let addIcon = document.createElement('i');
   addIcon.className = 'fa fa-plus fa-5x';
-  addDiv.className = 'add-card';
-  addDiv.appendChild(addIcon);
-  libraryGrid.appendChild(addDiv);
+  addCard.className = 'add-card';
+  addCard.addEventListener('click', addBookToLibrary);
+  addCard.appendChild(addIcon);
+  libraryGrid.appendChild(addCard);
 }
 
-Book.prototype.info = function () {
-  return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
-};
+function modalOn() {
+  modal.className = 'modal on';
+}
 
-const book1 = new Book('The Blade Itself', 'Joe Abercrombie', 529, 'Read');
-const book2 = new Book('Best Served Cold', 'Joe Abercrombie', 534, 'Read');
-const book3 = new Book('A Little Hatred', 'Joe Abercrombie', 471, 'To-Read');
+function modalOff(e) {
+  if (e.target.className === 'modal on' || e.target.className === 'closeBtn') {
+    modal.className = 'modal off';
+  }
+}
 
-myLibrary.push(book1);
-myLibrary.push(book2);
-myLibrary.push(book3);
+// Book.prototype.info = function () {
+//   return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
+// };
+
 displayLibrary();
