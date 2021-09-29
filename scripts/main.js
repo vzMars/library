@@ -9,6 +9,7 @@ const modalForm = document.querySelector('.modal-form');
 const errorElement = document.getElementById('error');
 
 closeBtn.addEventListener('click', modalOff);
+
 modalForm.addEventListener('submit', addBookToLibrary);
 window.addEventListener('click', modalOff);
 
@@ -45,8 +46,16 @@ function addBookToLibrary(e) {
   let newBook = new Book(bookTitle, bookAuthor, bookPages, bookReadStatus);
   myLibrary.push(newBook);
   console.log(myLibrary);
-  console.log(e);
   modalOff(e);
+  clearLibrary();
+  displayLibrary();
+}
+
+function removeBook(e) {
+  let item = e.target.parentElement.dataset.index;
+  console.log(item);
+  myLibrary.splice(item, 1);
+  console.log(myLibrary);
   clearLibrary();
   displayLibrary();
 }
@@ -64,30 +73,35 @@ function displayLibrary() {
     let bookAuthor = document.createElement('p');
     let bookPages = document.createElement('p');
     let bookStatus = document.createElement('button');
-    let removeBook = document.createElement('button');
+    let removeBtn = document.createElement('button');
 
     bookTitle.className = 'book-card-title';
     bookAuthor.className = 'book-card-text';
     bookPages.className = 'book-card-text';
     bookStatus.className = 'book-card-btn';
-    removeBook.className = 'book-card-btn';
+    bookStatus.id = 'statusBtn';
+    removeBtn.className = 'book-card-btn';
+    removeBtn.id = 'removeBtn';
+    removeBtn.addEventListener('click', removeBook);
+
     if (book.read === 'Read') {
       newDiv.className = 'book-card-green';
     } else {
       newDiv.className = 'book-card-red';
     }
+    newDiv.dataset.index = myLibrary.indexOf(book);
 
     bookTitle.textContent = book.title;
     bookAuthor.textContent = `Written by ${book.author}`;
     bookPages.textContent = `Pages: ${book.pages}`;
     bookStatus.textContent = book.read;
-    removeBook.textContent = 'Remove';
+    removeBtn.textContent = 'Remove';
 
     newDiv.appendChild(bookTitle);
     newDiv.appendChild(bookAuthor);
     newDiv.appendChild(bookPages);
     newDiv.appendChild(bookStatus);
-    newDiv.appendChild(removeBook);
+    newDiv.appendChild(removeBtn);
     libraryGrid.appendChild(newDiv);
   });
 
