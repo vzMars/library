@@ -1,8 +1,15 @@
 const libraryGrid = document.querySelector('.library-grid');
 const modal = document.querySelector('.modal');
 const closeBtn = document.querySelector('.closeBtn');
+const title = document.getElementById('title');
+const author = document.getElementById('author');
+const pages = document.getElementById('pages');
+const read = document.getElementById('read');
+const modalForm = document.querySelector('.modal-form');
+const errorElement = document.getElementById('error');
 
 closeBtn.addEventListener('click', modalOff);
+modalForm.addEventListener('submit', addBookToLibrary);
 window.addEventListener('click', modalOff);
 
 let myLibrary = [];
@@ -22,8 +29,22 @@ function Book(title, author, pages, read) {
   this.read = read;
 }
 
-function addBookToLibrary() {
-  modalOn();
+function addBookToLibrary(e) {
+  e.preventDefault();
+
+  let bookTitle = title.value;
+  let bookAuthor = author.value;
+  let bookPages = pages.value;
+  let bookReadStatus;
+  if (read.checked) {
+    bookReadStatus = 'Read';
+  } else {
+    bookReadStatus = 'To-Read';
+  }
+
+  let newBook = new Book(bookTitle, bookAuthor, bookPages, bookReadStatus);
+  myLibrary.push(newBook);
+  console.log(myLibrary);
 }
 
 function displayLibrary() {
@@ -64,7 +85,7 @@ function displayLibrary() {
   let addIcon = document.createElement('i');
   addIcon.className = 'fa fa-plus fa-5x';
   addCard.className = 'add-card';
-  addCard.addEventListener('click', addBookToLibrary);
+  addCard.addEventListener('click', modalOn);
   addCard.appendChild(addIcon);
   libraryGrid.appendChild(addCard);
 }
