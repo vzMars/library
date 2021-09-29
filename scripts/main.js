@@ -8,10 +8,9 @@ const read = document.getElementById('read');
 const modalForm = document.querySelector('.modal-form');
 const errorElement = document.getElementById('error');
 
-closeBtn.addEventListener('click', modalOff);
-
-modalForm.addEventListener('submit', addBookToLibrary);
+modalForm.addEventListener('submit', addBook);
 window.addEventListener('click', modalOff);
+closeBtn.addEventListener('click', modalOff);
 
 let myLibrary = [];
 
@@ -30,7 +29,18 @@ function Book(title, author, pages, read) {
   this.read = read;
 }
 
-function addBookToLibrary(e) {
+Book.prototype.changeReadStatus = function () {
+  console.log(`before: ${this.read}`);
+  if (this.read === 'Read') {
+    this.read = 'To-Read';
+  } else {
+    this.read = 'Read';
+  }
+  console.log(`after: ${this.read}`);
+  displayLibrary();
+};
+
+function addBook(e) {
   e.preventDefault();
 
   let bookTitle = title.value;
@@ -43,20 +53,19 @@ function addBookToLibrary(e) {
     bookReadStatus = 'To-Read';
   }
 
-  let newBook = new Book(bookTitle, bookAuthor, bookPages, bookReadStatus);
+  const newBook = new Book(bookTitle, bookAuthor, bookPages, bookReadStatus);
   myLibrary.push(newBook);
   console.log(myLibrary);
+
   modalOff(e);
-  clearLibrary();
   displayLibrary();
 }
 
 function removeBook(e) {
-  let item = e.target.parentElement.dataset.index;
-  console.log(item);
-  myLibrary.splice(item, 1);
+  let itemIndex = e.target.parentElement.dataset.index;
+  console.log(itemIndex);
+  myLibrary.splice(itemIndex, 1);
   console.log(myLibrary);
-  clearLibrary();
   displayLibrary();
 }
 
@@ -67,44 +76,53 @@ function clearLibrary() {
 }
 
 function displayLibrary() {
+  clearLibrary();
+  displayBooks();
+  displayAddBtn();
+}
+
+function displayBooks() {
   myLibrary.forEach((book) => {
-    let newDiv = document.createElement('div');
+    let newBook = document.createElement('div');
     let bookTitle = document.createElement('h2');
     let bookAuthor = document.createElement('p');
     let bookPages = document.createElement('p');
-    let bookStatus = document.createElement('button');
+    let statusBtn = document.createElement('button');
     let removeBtn = document.createElement('button');
 
     bookTitle.className = 'book-card-title';
     bookAuthor.className = 'book-card-text';
     bookPages.className = 'book-card-text';
-    bookStatus.className = 'book-card-btn';
-    bookStatus.id = 'statusBtn';
+    statusBtn.className = 'book-card-btn';
+    statusBtn.id = 'statusBtn';
+    statusBtn.addEventListener('click', book.changeReadStatus.bind(book));
     removeBtn.className = 'book-card-btn';
     removeBtn.id = 'removeBtn';
     removeBtn.addEventListener('click', removeBook);
 
     if (book.read === 'Read') {
-      newDiv.className = 'book-card-green';
+      newBook.className = 'book-card-green';
     } else {
-      newDiv.className = 'book-card-red';
+      newBook.className = 'book-card-red';
     }
-    newDiv.dataset.index = myLibrary.indexOf(book);
+    newBook.dataset.index = myLibrary.indexOf(book);
 
     bookTitle.textContent = book.title;
     bookAuthor.textContent = `Written by ${book.author}`;
     bookPages.textContent = `Pages: ${book.pages}`;
-    bookStatus.textContent = book.read;
+    statusBtn.textContent = book.read;
     removeBtn.textContent = 'Remove';
 
-    newDiv.appendChild(bookTitle);
-    newDiv.appendChild(bookAuthor);
-    newDiv.appendChild(bookPages);
-    newDiv.appendChild(bookStatus);
-    newDiv.appendChild(removeBtn);
-    libraryGrid.appendChild(newDiv);
+    newBook.appendChild(bookTitle);
+    newBook.appendChild(bookAuthor);
+    newBook.appendChild(bookPages);
+    newBook.appendChild(statusBtn);
+    newBook.appendChild(removeBtn);
+    libraryGrid.appendChild(newBook);
   });
+}
 
+function displayAddBtn() {
   let addCard = document.createElement('div');
   let addIcon = document.createElement('i');
   addIcon.className = 'fa fa-plus fa-5x';
