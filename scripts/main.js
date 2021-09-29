@@ -45,6 +45,16 @@ function addBookToLibrary(e) {
   let newBook = new Book(bookTitle, bookAuthor, bookPages, bookReadStatus);
   myLibrary.push(newBook);
   console.log(myLibrary);
+  console.log(e);
+  modalOff(e);
+  clearLibrary();
+  displayLibrary();
+}
+
+function clearLibrary() {
+  while (libraryGrid.firstChild) {
+    libraryGrid.removeChild(libraryGrid.firstChild);
+  }
 }
 
 function displayLibrary() {
@@ -90,13 +100,22 @@ function displayLibrary() {
   libraryGrid.appendChild(addCard);
 }
 
+function clearForm() {
+  modalForm.reset();
+}
+
 function modalOn() {
   modal.className = 'modal on';
 }
 
 function modalOff(e) {
-  if (e.target.className === 'modal on' || e.target.className === 'closeBtn') {
+  if (
+    e.target.className === 'modal on' ||
+    e.target.className === 'closeBtn' ||
+    e.type === 'submit'
+  ) {
     modal.className = 'modal off';
+    clearForm();
   }
 }
 
