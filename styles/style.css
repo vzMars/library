@@ -22,10 +22,10 @@ body {
 
 .library-grid {
   display: grid;
-  /* grid-template-columns: repeat(3, 1fr); */
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-auto-rows: minmax(250px, 1fr);
   grid-gap: 20px;
+  word-wrap: break-word;
 }
 
 .book-card-green {
@@ -153,4 +153,44 @@ body {
 #read {
   width: 20px;
   height: 20px;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    text-align: center;
+  }
+
+  .book-card-green,
+  .book-card-red,
+  .add-card {
+    margin: 0 30px;
+  }
+
+  .library-grid {
+    grid-template-columns: initial;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-card-green,
+  .book-card-red,
+  .add-card {
+    margin: 0 20px;
+  }
+
+  .modal-content {
+    width: 350px;
+  }
+}
+
+@media (max-width: 320px) {
+  .book-card-green,
+  .book-card-red,
+  .add-card {
+    margin: 0 10px;
+  }
+
+  .modal-content {
+    width: 290px;
+  }
 }

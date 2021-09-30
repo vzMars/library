@@ -1,12 +1,12 @@
 const libraryGrid = document.querySelector('.library-grid');
 const modal = document.querySelector('.modal');
 const closeBtn = document.querySelector('.closeBtn');
-const title = document.getElementById('title');
-const author = document.getElementById('author');
-const pages = document.getElementById('pages');
-const read = document.getElementById('read');
+const title = document.querySelector('#title');
+const author = document.querySelector('#author');
+const pages = document.querySelector('#pages');
+const read = document.querySelector('#read');
 const modalForm = document.querySelector('.modal-form');
-const errorElement = document.getElementById('error');
+const errorElement = document.querySelector('#error');
 
 modalForm.addEventListener('submit', addBook);
 window.addEventListener('click', modalOff);
@@ -14,13 +14,39 @@ closeBtn.addEventListener('click', modalOff);
 
 let myLibrary = [];
 
-const book1 = new Book('The Blade Itself', 'Joe Abercrombie', 529, 'Read');
-const book2 = new Book('Best Served Cold', 'Joe Abercrombie', 534, 'Read');
-const book3 = new Book('A Little Hatred', 'Joe Abercrombie', 471, 'To-Read');
+window.onload = function () {
+  console.log(myLibrary);
+  if (!localStorage.getItem('myLibrary')) {
+    console.log('no storage');
+    defaultBooks();
+    addLibraryToStorage();
+  } else {
+    console.log('yes storage');
+    getLibrary();
+  }
+};
 
-myLibrary.push(book1);
-myLibrary.push(book2);
-myLibrary.push(book3);
+function addLibraryToStorage() {
+  localStorage['myLibrary'] = JSON.stringify(myLibrary);
+  myLibrary = [];
+  getLibrary();
+}
+
+function getLibrary() {
+  let tempLibrary = JSON.parse(localStorage['myLibrary']);
+  for (let i = 0; i < tempLibrary.length; i++) {
+    console.log(tempLibrary[i]);
+    let book = new Book(
+      tempLibrary[i].title,
+      tempLibrary[i].author,
+      tempLibrary[i].pages,
+      tempLibrary[i].read
+    );
+    myLibrary.push(book);
+  }
+  console.log(myLibrary);
+  displayLibrary();
+}
 
 function Book(title, author, pages, read) {
   this.title = title;
@@ -37,12 +63,11 @@ Book.prototype.changeReadStatus = function () {
     this.read = 'Read';
   }
   console.log(`after: ${this.read}`);
-  displayLibrary();
+  addLibraryToStorage();
 };
 
 function addBook(e) {
   e.preventDefault();
-
   let bookTitle = title.value;
   let bookAuthor = author.value;
   let bookPages = pages.value;
@@ -53,12 +78,11 @@ function addBook(e) {
     bookReadStatus = 'To-Read';
   }
 
-  const newBook = new Book(bookTitle, bookAuthor, bookPages, bookReadStatus);
+  let newBook = new Book(bookTitle, bookAuthor, bookPages, bookReadStatus);
   myLibrary.push(newBook);
   console.log(myLibrary);
-
+  addLibraryToStorage();
   modalOff(e);
-  displayLibrary();
 }
 
 function removeBook(e) {
@@ -66,7 +90,17 @@ function removeBook(e) {
   console.log(itemIndex);
   myLibrary.splice(itemIndex, 1);
   console.log(myLibrary);
-  displayLibrary();
+  addLibraryToStorage();
+}
+
+function defaultBooks() {
+  let book1 = new Book('The Blade Itself', 'Joe Abercrombie', 529, 'Read');
+  let book2 = new Book('Best Served Cold', 'Joe Abercrombie', 534, 'Read');
+  let book3 = new Book('A Little Hatred', 'Joe Abercrombie', 471, 'To-Read');
+
+  myLibrary.push(book1);
+  myLibrary.push(book2);
+  myLibrary.push(book3);
 }
 
 function clearLibrary() {
@@ -154,5 +188,3 @@ function modalOff(e) {
 // Book.prototype.info = function () {
 //   return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
 // };
-
-displayLibrary();
