@@ -2,8 +2,11 @@ const libraryGrid = document.querySelector('.library-grid');
 const modal = document.querySelector('.modal');
 const closeBtn = document.querySelector('.closeBtn');
 const title = document.querySelector('#title');
+const titleError = document.querySelector('#title + span.error');
 const author = document.querySelector('#author');
+const authorError = document.querySelector('#author + span.error');
 const pages = document.querySelector('#pages');
+const pagesError = document.querySelector('#pages + span.error');
 const read = document.querySelector('#read');
 const modalForm = document.querySelector('.modal-form');
 
@@ -15,8 +18,46 @@ closeBtn.addEventListener('click', (event) => {
   displayControl.modalOff(event);
 });
 
+title.addEventListener('input', (event) => {
+  if (title.validity.valid) {
+    titleError.textContent = '';
+    titleError.className = 'error';
+  } else {
+    displayControl.titleErrorMessage();
+  }
+});
+
+author.addEventListener('input', (event) => {
+  if (author.validity.valid) {
+    authorError.textContent = '';
+    authorError.className = 'error';
+  } else {
+    displayControl.authorErrorMessage();
+  }
+});
+
+pages.addEventListener('input', (event) => {
+  if (pages.validity.valid) {
+    pagesError.textContent = '';
+    pagesError.className = 'error';
+  } else {
+    displayControl.pagesErrorMessage();
+  }
+});
+
 modalForm.addEventListener('submit', (event) => {
-  myLibrary.addBook(event);
+  console.log(title.validity.valid);
+  console.log(title.validity);
+  if (
+    !title.validity.valid ||
+    !author.validity.valid ||
+    !pages.validity.valid
+  ) {
+    displayControl.showError();
+    event.preventDefault();
+  } else {
+    myLibrary.addBook(event);
+  }
 });
 
 class Book {
@@ -185,6 +226,12 @@ class DisplayController {
 
   clearForm() {
     modalForm.reset();
+    titleError.textContent = '';
+    titleError.className = 'error';
+    authorError.textContent = '';
+    authorError.className = 'error';
+    pagesError.textContent = '';
+    pagesError.className = 'error';
   }
 
   modalOn() {
@@ -200,6 +247,38 @@ class DisplayController {
       modal.className = 'modal off';
       this.clearForm();
     }
+  }
+
+  showError() {
+    if (title.validity.valueMissing) {
+      this.titleErrorMessage();
+    }
+    if (author.validity.valueMissing) {
+      this.authorErrorMessage();
+    }
+    if (pages.validity.valueMissing || pages.validity.rangeUnderflow) {
+      this.pagesErrorMessage();
+    }
+  }
+
+  titleErrorMessage() {
+    titleError.textContent = 'You need to enter a title for the book.';
+    titleError.className = 'error active';
+  }
+
+  authorErrorMessage() {
+    authorError.textContent = 'You need to enter an author for the book.';
+    authorError.className = 'error active';
+  }
+
+  pagesErrorMessage() {
+    if (pages.validity.valueMissing) {
+      pagesError.textContent = 'You need to enter the page count for the book';
+    }
+    if (pages.validity.rangeUnderflow) {
+      pagesError.textContent = 'Book page count should be greater than 1';
+    }
+    pagesError.className = 'error active';
   }
 }
 

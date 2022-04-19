@@ -28,38 +28,54 @@
       <div class="modal">
         <div class="modal-content">
           <span class="closeBtn">&times;</span>
-          <form class="modal-form">
-            <input
-              class="input"
-              id="title"
-              name="title"
-              type="text"
-              placeholder="Title"
-              maxlength="50"
-              required
-            />
-            <input
-              class="input"
-              id="author"
-              name="author"
-              type="text"
-              placeholder="Author"
-              maxlength="50"
-              required
-            />
-            <input
-              class="input"
-              id="pages"
-              name="pages"
-              type="number"
-              placeholder="Pages"
-              min="1"
-              required
-            />
-            <div class="modal-checkbox">
-              <label for="read">Read?</label>
-              <input class="input" id="read" name="read" type="checkbox" />
-            </div>
+          <form class="modal-form" novalidate>
+            <label for="title">
+              <span>Title</span>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                class="input"
+                placeholder="Mistborn: The Final Empire"
+                maxlength="50"
+                required
+              />
+              <span class="error" aria-live="polite"></span>
+            </label>
+
+            <label for="author">
+              <span>Author</span>
+              <input
+                type="text"
+                id="author"
+                name="author"
+                class="input"
+                placeholder="Brandon Sanderson"
+                maxlength="50"
+                required
+              />
+              <span class="error" aria-live="polite"></span>
+            </label>
+
+            <label for="pages">
+              <span>Pages</span>
+              <input
+                type="number"
+                id="pages"
+                name="pages"
+                class="input"
+                placeholder="541"
+                min="1"
+                required
+              />
+              <span class="error" aria-live="polite"></span>
+            </label>
+
+            <label for="read">
+              <span>Read?</span>
+              <input type="checkbox" id="read" name="read" class="input" />
+            </label>
+
             <button class="submit-btn" type="submit">Add</button>
           </form>
         </div>
