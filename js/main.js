@@ -1,65 +1,3 @@
-const libraryGrid = document.querySelector('.library-grid');
-const modal = document.querySelector('.modal');
-const closeBtn = document.querySelector('.closeBtn');
-const title = document.querySelector('#title');
-const titleError = document.querySelector('#title + span.error');
-const author = document.querySelector('#author');
-const authorError = document.querySelector('#author + span.error');
-const pages = document.querySelector('#pages');
-const pagesError = document.querySelector('#pages + span.error');
-const read = document.querySelector('#read');
-const modalForm = document.querySelector('.modal-form');
-
-window.addEventListener('click', (event) => {
-  displayControl.modalOff(event);
-});
-
-closeBtn.addEventListener('click', (event) => {
-  displayControl.modalOff(event);
-});
-
-title.addEventListener('input', (event) => {
-  if (title.validity.valid) {
-    titleError.textContent = '';
-    titleError.className = 'error';
-  } else {
-    displayControl.titleErrorMessage();
-  }
-});
-
-author.addEventListener('input', (event) => {
-  if (author.validity.valid) {
-    authorError.textContent = '';
-    authorError.className = 'error';
-  } else {
-    displayControl.authorErrorMessage();
-  }
-});
-
-pages.addEventListener('input', (event) => {
-  if (pages.validity.valid) {
-    pagesError.textContent = '';
-    pagesError.className = 'error';
-  } else {
-    displayControl.pagesErrorMessage();
-  }
-});
-
-modalForm.addEventListener('submit', (event) => {
-  console.log(title.validity.valid);
-  console.log(title.validity);
-  if (
-    !title.validity.valid ||
-    !author.validity.valid ||
-    !pages.validity.valid
-  ) {
-    displayControl.showError();
-    event.preventDefault();
-  } else {
-    myLibrary.addBook(event);
-  }
-});
-
 class Book {
   constructor(title, author, pages, read) {
     this.title = title;
@@ -108,7 +46,7 @@ class Library {
   }
 
   removeBook(event) {
-    let itemIndex = event.target.parentElement.dataset.index;
+    const itemIndex = event.target.parentElement.dataset.index;
     this.library.splice(itemIndex, 1);
     displayControl.addLibraryToStorage();
   }
@@ -146,7 +84,7 @@ class DisplayController {
   }
 
   getLibrary() {
-    let tempLibrary = JSON.parse(localStorage['myLibrary']);
+    const tempLibrary = JSON.parse(localStorage['myLibrary']);
     for (let i = 0; i < tempLibrary.length; i++) {
       const book = new Book(
         tempLibrary[i].title,
@@ -173,12 +111,12 @@ class DisplayController {
 
   displayBooks() {
     myLibrary.library.forEach((book) => {
-      let newBook = document.createElement('div');
-      let bookTitle = document.createElement('h2');
-      let bookAuthor = document.createElement('p');
-      let bookPages = document.createElement('p');
-      let statusBtn = document.createElement('button');
-      let removeBtn = document.createElement('button');
+      const newBook = document.createElement('div');
+      const bookTitle = document.createElement('h2');
+      const bookAuthor = document.createElement('p');
+      const bookPages = document.createElement('p');
+      const statusBtn = document.createElement('button');
+      const removeBtn = document.createElement('button');
 
       bookTitle.className = 'book-card-title';
       bookAuthor.className = 'book-card-text';
@@ -205,21 +143,20 @@ class DisplayController {
       statusBtn.textContent = book.read;
       removeBtn.textContent = 'Remove';
 
-      newBook.appendChild(bookTitle);
-      newBook.appendChild(bookAuthor);
-      newBook.appendChild(bookPages);
-      newBook.appendChild(statusBtn);
-      newBook.appendChild(removeBtn);
+      newBook.append(bookTitle, bookAuthor, bookPages, statusBtn, removeBtn);
       libraryGrid.appendChild(newBook);
     });
   }
 
   displayAddBtn() {
-    let addCard = document.createElement('div');
-    let addIcon = document.createElement('i');
+    const addCard = document.createElement('div');
+    const addIcon = document.createElement('i');
+
     addIcon.className = 'fa fa-plus fa-5x';
     addCard.className = 'add-card';
+
     addCard.addEventListener('click', this.modalOn);
+
     addCard.appendChild(addIcon);
     libraryGrid.appendChild(addCard);
   }
@@ -281,6 +218,68 @@ class DisplayController {
     pagesError.className = 'error active';
   }
 }
+
+const libraryGrid = document.querySelector('.library-grid');
+const modal = document.querySelector('.modal');
+const closeBtn = document.querySelector('.closeBtn');
+const title = document.querySelector('#title');
+const titleError = document.querySelector('#title + span.error');
+const author = document.querySelector('#author');
+const authorError = document.querySelector('#author + span.error');
+const pages = document.querySelector('#pages');
+const pagesError = document.querySelector('#pages + span.error');
+const read = document.querySelector('#read');
+const modalForm = document.querySelector('.modal-form');
+
+window.addEventListener('click', (event) => {
+  displayControl.modalOff(event);
+});
+
+closeBtn.addEventListener('click', (event) => {
+  displayControl.modalOff(event);
+});
+
+title.addEventListener('input', (event) => {
+  if (title.validity.valid) {
+    titleError.textContent = '';
+    titleError.className = 'error';
+  } else {
+    displayControl.titleErrorMessage();
+  }
+});
+
+author.addEventListener('input', (event) => {
+  if (author.validity.valid) {
+    authorError.textContent = '';
+    authorError.className = 'error';
+  } else {
+    displayControl.authorErrorMessage();
+  }
+});
+
+pages.addEventListener('input', (event) => {
+  if (pages.validity.valid) {
+    pagesError.textContent = '';
+    pagesError.className = 'error';
+  } else {
+    displayControl.pagesErrorMessage();
+  }
+});
+
+modalForm.addEventListener('submit', (event) => {
+  console.log(title.validity.valid);
+  console.log(title.validity);
+  if (
+    !title.validity.valid ||
+    !author.validity.valid ||
+    !pages.validity.valid
+  ) {
+    displayControl.showError();
+    event.preventDefault();
+  } else {
+    myLibrary.addBook(event);
+  }
+});
 
 const myLibrary = new Library();
 const displayControl = new DisplayController();
